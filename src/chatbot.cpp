@@ -55,8 +55,8 @@ ChatBot::ChatBot(ChatBot &&other)
     _chatLogic = other.GetChatLogicHandle();
     _rootNode = other._rootNode;
 
-    // other._chatLogic = nullptr;
-    // other._rootNode = nullptr;
+    other._chatLogic = nullptr;
+    other._rootNode = nullptr;
 
     _chatLogic->SetChatbotHandle(this);
 }
@@ -72,9 +72,10 @@ ChatBot& ChatBot::operator=(ChatBot &&other)
     _chatLogic = other.GetChatLogicHandle();
     _rootNode = other._rootNode;
 
-    // other._chatLogic = nullptr;
-    // other._rootNode = nullptr;
     _chatLogic->SetChatbotHandle(this);
+
+    other._chatLogic = nullptr;
+    other._rootNode = nullptr;
     return *this;
 }
 
@@ -82,7 +83,9 @@ ChatBot& ChatBot::operator=(ChatBot &&other)
 ChatBot::ChatBot(const ChatBot &other)
 {
     std::cout << "ChatBot Copy Constructor" << std::endl;
-    _image = other._image;
+    //Deep copy owned resource
+    _image = new wxBitmap(*other._image);
+
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
 }
@@ -93,9 +96,12 @@ ChatBot& ChatBot::operator=(const ChatBot &other)
     std::cout << "ChatBot Copy Assignment Operator" << std::endl;
     if (this == &other)
         return *this;
-    _image = other._image;
+    //Deep copy owned resource
+    _image = new wxBitmap(*other._image);
+
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
+
     return *this;
 }
    
